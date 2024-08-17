@@ -14,7 +14,7 @@ const CreateVaultPassword = () => {
     newCode[index] = value;
     setCode(newCode);
 
-    // Move to next input if current one is filled
+    
     if (value && index < 3) {
       inputRefs.current[index + 1].focus();
     }

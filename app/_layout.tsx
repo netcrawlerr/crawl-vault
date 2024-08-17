@@ -1,6 +1,8 @@
+// app/_layout.tsx
+import React from "react";
 import { Stack } from "expo-router";
 
-const RootLayout = () => {
+export default function Layout() {
   return (
     <Stack
       screenOptions={{
@@ -8,12 +10,12 @@ const RootLayout = () => {
       }}
     >
       <Stack.Screen name="index" />
-      <Stack.Screen name="/screens/onboarding/OnboardingOne" />
-      <Stack.Screen name="/screens/onboarding/OnboardingTwo" />
-      <Stack.Screen name="/screens/SignupScreen" />
-      <Stack.Screen name="/screens/LoginScreen" />
+      <Stack.Screen name="screens/onboarding/OnboardingOne" />
+      <Stack.Screen name="screens/onboarding/OnboardingTwo" />
+      <Stack.Screen name="screens/LoginScreen" />
+      <Stack.Screen name="screens/SignupScreen" />
+      <Stack.Screen name="screens/Main" />
+      {/* Add other screens here */}
     </Stack>
   );
-};
-
-export default RootLayout;
+}

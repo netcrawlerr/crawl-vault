@@ -36,7 +36,12 @@ const OnboardingTwo = () => {
           href={"/screens/LoginScreen"}
         >
           <TouchableOpacity>
-            <Text className="text-slate-100 text-center text-xl">Login</Text>
+            <Link
+              href={"/screens/LoginScreen"}
+              className="text-slate-100 text-center text-xl"
+            >
+              Login
+            </Link>
           </TouchableOpacity>
         </Link>
       </View>

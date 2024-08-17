@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import OnboardingOne from "./screens/onboarding/OnboardingOne";
 import SplashScreen from "./screens/SplashScreen";
-import Dashboard from "./screens/Dashboard";
+import AddPasswordScreen from "./screens/(tabs)/AddPasswordScreen";
+import PasswordsScreen from "./screens/(tabs)/PasswordsScreen";
+import Main from "./screens/Main";
 
 const Home = () => {
   const [showSplash, setShowSplash] = useState(true);
@@ -21,7 +23,7 @@ const Home = () => {
       {showSplash ? (
         <SplashScreen />
       ) : isLoggedIn ? (
-        <Dashboard />
+        <Main />
       ) : (
         <OnboardingOne />
       )}
