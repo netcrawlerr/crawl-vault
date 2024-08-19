@@ -1,14 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter, useGlobalSearchParams, Link } from "expo-router";
-import { createVault } from "@/database/database";
+import { useRouter, useGlobalSearchParams } from "expo-router";
+import { accessVault } from "@/database/database";
 import useUser from "../../hooks/useUser"; // Import Zustand store
 
-const CreateVaultPassword = () => {
+const AccessVault = () => {
   const [code, setCode] = useState(["", "", "", ""]);
   const router = useRouter();
-
   // Extract userId from URL parameters
   const { userId: userIdFromParams } = useGlobalSearchParams();
 
@@ -16,6 +15,8 @@ const CreateVaultPassword = () => {
     userId: state.userId,
     setUserId: state.setUserId,
   }));
+
+  console.log("Accessing Vault userid", userId);
 
   // Update Zustand store with userId from URL params
   useEffect(() => {
@@ -42,39 +43,38 @@ const CreateVaultPassword = () => {
     }
   };
 
-  const handleSetVault = async () => {
-    console.log("Code set is ", code.join(""));
-    console.log("User ID is ", userId);
+  const handleAccessVault = async () => {
     try {
-      const createdVault = await createVault(userId, code);
-      console.log("Created Vault", createdVault);
+      const userInputCode = code.join("");
+      console.log("userInput code", userInputCode);
 
-      // Navigate to LoginScreen after setting the vault
-      router.push("/screens/LoginScreen");
+      const result = await accessVault(userId);
+      console.log("result from handleAccessVault", result.code);
+      const isCorrectCode = userInputCode === result.code;
+      console.log("is correct", isCorrectCode);
+
+      if (isCorrectCode) {
+        setUserId(userId); // Persist the user ID in the store
+        router.push("/screens/Main");
+      } else {
+        router.push("/screens/AccessVault");
+      }
     } catch (error) {
-      console.log("error from create vault", error);
+      console.log("error from handleAccessVault", error);
     }
   };
 
   return (
     <View className="flex-1 justify-center p-6 bg-stone-900 h-screen">
-      <TouchableOpacity
-        onPress={() => router.back()}
-        className="absolute top-10 left-5"
-      >
-        <Ionicons name="arrow-back" size={24} color="white" />
-      </TouchableOpacity>
-
       <Image
         className="w-[100px] h-[100px] text-center mx-auto mb-8"
         source={require("../../assets/images/padlock.png")}
       />
       <Text className="text-5xl font-bold mb-4 text-green-500">
-        Setup Vault
+        Enter Vault
       </Text>
-      <Text className="text-3xl font-bold mb-4 text-slate-100">Create</Text>
       <Text className="text-3xl font-bold mb-4 text-slate-100">
-        A New 4-Digit Code
+        Enter the 4-Digit Code
       </Text>
 
       <View className="flex-row justify-center mb-6 space-x-8">
@@ -97,17 +97,15 @@ const CreateVaultPassword = () => {
       </View>
 
       <TouchableOpacity
-        onPress={handleSetVault}
+        onPress={handleAccessVault}
         className="bg-green-600 px-32 py-3 rounded-lg mb-2"
       >
-        <Text className="text-slate-100 text-center text-xl">Set Code</Text>
+        <Text className="text-slate-100 text-center text-xl">Let Me Pass</Text>
       </TouchableOpacity>
 
-      <Link href={"/screens/SignupScreen"} className="mt-2 text-blue-400 mb-2">
-        Don't Have an account? Signup
-      </Link>
+      <Text className="mt-2 text-blue-400 mb-2">Forgot code ?</Text>
     </View>
   );
 };
 
-export default CreateVaultPassword;
+export default AccessVault;
