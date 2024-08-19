@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter, Link } from "expo-router";
 import { loginUser } from "@/database/database";
 import useUser from "@/hooks/useUser"; // Import Zustand store
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -45,9 +46,13 @@ const LoginScreen = () => {
         setUser(user);
         console.log("User id after login", userId);
 
+        // Save the login status in AsyncStorage
+        await AsyncStorage.setItem("isLoggedIn", "true");
+        await AsyncStorage.setItem("userId", String(user.user_id));
+
         setIsLoggedIn(true);
         setIsRegistered(true); // Update registration status on successful login
-        router.push(`/screens/AccessVault?userId=${user.user_id}`);
+        router.replace(`/screens/AccessVault?userId=${user.user_id}`);
       }
     } catch (error) {
       setMessage("Login failed"); // Set error message in case of failure
@@ -57,12 +62,12 @@ const LoginScreen = () => {
 
   return (
     <View className="flex-1 justify-center p-6 bg-stone-900 h-screen ">
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => router.back()}
         className="absolute top-10 left-5"
       >
         <Ionicons name="arrow-back" size={24} color="white" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <Text className="text-3xl text-center font-bold mb-4 text-slate-100">
         Login

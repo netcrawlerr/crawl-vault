@@ -48,6 +48,7 @@ const SignupScreen = () => {
         setMessage(newUser.error); // Set error message if registration fails
       } else {
         setMessage("Registration Successful");
+        setIsRegistered(true);
         // Set user details and registration status in Zustand store
         setUser({
           userId: newUser.user_id,
@@ -56,7 +57,9 @@ const SignupScreen = () => {
         });
         setIsRegistered(true);
         // Navigate to CreateVaultPassword screen with userId as a query parameter
-        router.push(`/screens/CreateVaultPassword?userId=${newUser.user_id}`);
+        router.replace(
+          `/screens/CreateVaultPassword?userId=${newUser.user_id}`
+        );
       }
     } catch (error) {
       setMessage("Registration failed"); // Set error message in case of failure
