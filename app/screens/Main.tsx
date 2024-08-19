@@ -6,10 +6,18 @@ import SettingsScreen from "./(tabs)/SettingsScreen";
 import PasswordsScreen from "./(tabs)/PasswordsScreen";
 
 import { Ionicons } from "@expo/vector-icons";
-
+import useUser from "@/hooks/useUser";
+import { initDB } from "@/database/database";
 const Tab = createBottomTabNavigator();
 
 const Main = () => {
+  const { userId } = useUser();
+
+  console.log("userId from main", userId);
+
+  // initDB();
+  console.log("init db from main ^");
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

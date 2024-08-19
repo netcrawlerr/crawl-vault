@@ -1,20 +1,23 @@
-import { Link } from "expo-router";
+import { View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
-import OnboardingOne from "./screens/onboarding/OnboardingOne";
 import SplashScreen from "./screens/SplashScreen";
-import AddPasswordScreen from "./screens/(tabs)/AddPasswordScreen";
-import PasswordsScreen from "./screens/(tabs)/PasswordsScreen";
+import OnboardingOne from "./screens/onboarding/OnboardingOne";
+import LoginScreen from "./screens/LoginScreen";
 import Main from "./screens/Main";
+import AccessVault from "./screens/AccessVault";
+import useUser from "@/hooks/useUser";
+import { initDB } from "@/database/database";
 
 const Home = () => {
+  initDB();
   const [showSplash, setShowSplash] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const { isLoggedIn, isRegistered } = useUser();
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplash(false);
     }, 3000);
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -22,12 +25,15 @@ const Home = () => {
     <View className="flex-1 bg-stone-900 h-screen">
       {showSplash ? (
         <SplashScreen />
-      ) : isLoggedIn ? (
-        <Main />
+      ) : isRegistered ? (
+        isLoggedIn ? (
+          <Main />
+        ) : (
+          <AccessVault />
+        )
       ) : (
         <OnboardingOne />
       )}
-      {/* <OnboardingOne /> */}
     </View>
   );
 };
