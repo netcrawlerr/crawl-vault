@@ -1,17 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import useUser from "@/hooks/useUser";
+import { useFocusEffect } from "@react-navigation/native";
+import { fetchSingleUser } from "@/database/database";
+
 const ProfileScreen = () => {
   const [name, setName] = useState("John Doe");
   const [email, setEmail] = useState("john.doe@example.com");
   const [password, setPassword] = useState("21387ህ#2ጁህድ#");
   const [isPasswordVisible, setPasswordVisible] = useState(false);
 
+  const { userId } = useUser();
+  console.log("User id in profile screen", userId);
+
   const handleSavePress = () => {};
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!isPasswordVisible);
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchUser = async () => {
+        const user = await fetchSingleUser(userId);
+        // console.log("FetchedSingle User", user);
+        setName(user.name);
+        setEmail(user.email);
+        setPassword(user.password);
+      };
+      fetchUser();
+    }, [userId])
+  );
 
   return (
     <View className="flex-1 p-5 bg-stone-900 justify-center items-center">

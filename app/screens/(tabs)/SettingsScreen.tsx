@@ -1,8 +1,32 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
+import useUser from "@/hooks/useUser";
+import { useRouter } from "expo-router";
+import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SettingsScreen = () => {
+  const { userId, isLoggedIn, setIsLoggedIn, setUser, setUserId } = useUser();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("isLoggedIn");
+    setUser(null);
+    setUserId(null);
+    setIsLoggedIn(false);
+    await AsyncStorage.removeItem("userId");
+    router.replace("/screens/LoginScreen");
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (!isLoggedIn) {
+        router.replace("/screens/AccessVault");
+      }
+    }, [isLoggedIn])
+  );
+
   return (
     <View className="flex-1 p-6 justify-center bg-stone-900">
       {/* Security Settings Section */}
@@ -79,7 +103,10 @@ const SettingsScreen = () => {
         </Text>
 
         <View className="flex gap-y-3">
-          <TouchableOpacity className="flex flex-row items-center  bg-stone-800 p-4 rounded-lg">
+          <TouchableOpacity
+            onPress={handleLogout}
+            className="flex flex-row items-center  bg-stone-800 p-4 rounded-lg"
+          >
             <Ionicons name="log-out-outline" size={24} color="white" />
 
             <Text className="text-slate-100 text-l font-bold mx-2 flex-1">

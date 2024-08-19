@@ -6,6 +6,8 @@ import { createVault } from "@/database/database";
 import useUser from "../../hooks/useUser"; // Import Zustand store
 
 const CreateVaultPassword = () => {
+  const { isLoggedIn } = useUser();
+  console.log("Is User Logged In(CREATE___VAULT)", isLoggedIn);
   const [code, setCode] = useState(["", "", "", ""]);
   const router = useRouter();
 
@@ -50,7 +52,7 @@ const CreateVaultPassword = () => {
       console.log("Created Vault", createdVault);
 
       // Navigate to LoginScreen after setting the vault
-      router.push("/screens/LoginScreen");
+      router.replace("/screens/LoginScreen");
     } catch (error) {
       console.log("error from create vault", error);
     }

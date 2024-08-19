@@ -45,14 +45,14 @@ const PasswordsScreen = () => {
     React.useCallback(() => {
       const fetchPasswords = async () => {
         const fetchedPasswords = await getAllPasswords(userId);
-        console.log("Effect", fetchedPasswords);
+        // console.log("Effect", fetchedPasswords);
         setPasswords(fetchedPasswords);
       };
       fetchPasswords();
     }, [userId, selectedCategory])
   );
 
-  console.log("passwords", passwords);
+  // console.log("passwords", passwords);
 
   const displayedPasswords = Array.isArray(passwords) ? passwords : [];
 
@@ -66,7 +66,7 @@ const PasswordsScreen = () => {
           .toLowerCase()
           .includes(search.toLowerCase()))
   );
-  console.log(filteredPasswords);
+  // console.log(filteredPasswords);
 
   const copyToClipboard = (password) => {
     Clipboard.setString(password);

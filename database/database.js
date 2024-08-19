@@ -288,10 +288,36 @@ export const getAllPasswords = async (userId) => {
       return { error: "No passwords found" };
     }
 
-    console.log("Fetched passwords:", passwords);
+    // console.log("Fetched passwords:", passwords);
     return passwords; // Return the list of passwords
   } catch (error) {
     console.log("Error fetching passwords:", error);
     return { error: "Failed to fetch passwords" };
+  }
+};
+
+export const fetchSingleUser = async (userId) => {
+  try {
+    const db = await getDBConnection();
+    if (!db) {
+      console.log("Database connection is null.");
+      return { error: "Database connection failed" };
+    }
+
+    const singleUser = await db.getFirstAsync(
+      "SELECT * FROM users WHERE user_id = ?",
+      [userId]
+    );
+
+    if (!singleUser) {
+      console.log("No user found.");
+      return { error: "No user found" };
+    }
+
+    console.log("Fetched user:", singleUser);
+    return singleUser;
+  } catch (error) {
+    console.log("Error fetching user:", error);
+    return { error: "Failed to fetch user" };
   }
 };

@@ -6,6 +6,12 @@ import { accessVault } from "@/database/database";
 import useUser from "../../hooks/useUser"; // Import Zustand store
 
 const AccessVault = () => {
+  const { isLoggedIn, setIsLoggedIn, isRegistered, setIsRegistered } =
+    useUser();
+
+  console.log("Is User Logged In ACCESS---_VAULT", isLoggedIn);
+  console.log("Is User Registered In ACCESS---_VAULT", isRegistered);
+
   const [code, setCode] = useState(["", "", "", ""]);
   const router = useRouter();
   // Extract userId from URL parameters
@@ -28,13 +34,13 @@ const AccessVault = () => {
   const inputRefs = useRef([]);
 
   const handleChange = (value, index) => {
-    const newCode = [...code];
-    newCode[index] = value;
-    setCode(newCode);
-
     if (value && index < 3) {
       inputRefs.current[index + 1].focus();
     }
+
+    const newCode = [...code];
+    newCode[index] = value;
+    setCode(newCode);
   };
 
   const handleBackspace = (value, index) => {
@@ -46,21 +52,27 @@ const AccessVault = () => {
   const handleAccessVault = async () => {
     try {
       const userInputCode = code.join("");
-      console.log("userInput code", userInputCode);
+      console.log("User Input Code:", userInputCode);
 
       const result = await accessVault(userId);
-      console.log("result from handleAccessVault", result.code);
+      console.log("Result from handleAccessVault:", result);
+
       const isCorrectCode = userInputCode === result.code;
-      console.log("is correct", isCorrectCode);
+      console.log("Is Correct Code:", isCorrectCode);
 
       if (isCorrectCode) {
+        setIsLoggedIn(true); // Only set as logged in if the code is correct
         setUserId(userId); // Persist the user ID in the store
-        router.push("/screens/Main");
+        router.replace("/screens/Main"); // Use replace instead of push to prevent back navigation to AccessVault
       } else {
-        router.push("/screens/AccessVault");
+        console.log("Incorrect PIN");
+        // Optionally, you can show an error message here.
       }
+
+      // Reset the code inputs
+      setCode(["", "", "", ""]);
     } catch (error) {
-      console.log("error from handleAccessVault", error);
+      console.log("Error in handleAccessVault:", error);
     }
   };
 

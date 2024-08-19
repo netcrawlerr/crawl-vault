@@ -4,19 +4,22 @@ import AddPasswordScreen from "./(tabs)/AddPasswordScreen";
 import ProfileScreen from "./(tabs)/ProfileScreen";
 import SettingsScreen from "./(tabs)/SettingsScreen";
 import PasswordsScreen from "./(tabs)/PasswordsScreen";
-
+import { View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import useUser from "@/hooks/useUser";
-import { initDB } from "@/database/database";
+import { useRouter } from "expo-router";
+
 const Tab = createBottomTabNavigator();
 
 const Main = () => {
   const { userId } = useUser();
+  const router = useRouter();
 
   console.log("userId from main", userId);
 
-  // initDB();
-  console.log("init db from main ^");
+  const handleLockApp = () => {
+    router.replace("/screens/AccessVault");
+  };
 
   return (
     <Tab.Navigator
@@ -26,7 +29,7 @@ const Main = () => {
           if (route.name === "Passwords") {
             iconName = "shield";
           } else if (route.name === "AddPassword") {
-            iconName = "lock-closed";
+            iconName = "add-circle";
           } else if (route.name === "Profile") {
             iconName = "person";
           } else if (route.name === "Settings") {
@@ -41,9 +44,21 @@ const Main = () => {
           elevation: 0,
           shadowOpacity: 0,
           borderTopWidth: 0,
-          marginBottom: 10,
+          paddingBottom: 10,
         },
-        headerShown: false,
+        headerShown: true,
+        // Enable header
+        headerRight: () => (
+          <View style={{ marginRight: 16 }}>
+            <TouchableOpacity onPress={handleLockApp}>
+              <Ionicons name="lock-closed" size={24} color="white" />
+            </TouchableOpacity>
+          </View>
+        ),
+        headerStyle: {
+          backgroundColor: "#1c1917",
+        },
+        headerTintColor: "white",
       })}
     >
       <Tab.Screen name="Passwords" component={PasswordsScreen} />
