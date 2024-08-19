@@ -4,6 +4,9 @@ import * as SQLite from "expo-sqlite";
 const getDBConnection = async () => {
   try {
     const db = await SQLite.openDatabaseAsync("crawl_vault.db");
+    if (!db) {
+      console.log("Failed to open database.");
+    }
     return db;
   } catch (error) {
     console.error("Error opening database:", error);
@@ -11,23 +14,53 @@ const getDBConnection = async () => {
   }
 };
 
-// SQL Queries
-const createTablesQuery = `
- PRAGMA journal_mode = WAL;
+// // SQL Queries
+// const createTablesQuery = `
+//  PRAGMA journal_mode = WAL;
+//   CREATE TABLE IF NOT EXISTS users(
+//       user_id INTEGER PRIMARY KEY,
+//       name VARCHAR(255) NOT NULL,
+//       email VARCHAR(255) NOT NULL,
+//       password VARCHAR(255) NOT NULL
+//   );
+
+//   CREATE TABLE IF NOT EXISTS vault(
+//       vault_id INTEGER PRIMARY KEY,
+//       user_id INTEGER REFERENCES users(user_id) NOT NULL,
+//       code VARCHAR(4) NOT NULL
+//   );
+
+//   CREATE TABLE IF NOT EXISTS passwords(
+//       password_id INTEGER PRIMARY KEY,
+//       user_id INTEGER REFERENCES users(user_id),
+//       website_name VARCHAR(255) NOT NULL,
+//       website_user VARCHAR(255) NOT NULL,
+//       website_password VARCHAR(255) NOT NULL,
+//       category VARCHAR(255) DEFAULT "personal"
+//   );
+// `;
+
+const createUsersTableQuery = `
+PRAGMA journal_mode = WAL;
   CREATE TABLE IF NOT EXISTS users(
       user_id INTEGER PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
       email VARCHAR(255) NOT NULL,
       password VARCHAR(255) NOT NULL
   );
+`;
 
-  
+const createVaultTableQuery = `
+PRAGMA journal_mode = WAL;
   CREATE TABLE IF NOT EXISTS vault(
       vault_id INTEGER PRIMARY KEY,
       user_id INTEGER REFERENCES users(user_id) NOT NULL,
       code VARCHAR(4) NOT NULL 
   );
+`;
 
+const createPasswordsTableQuery = `
+PRAGMA journal_mode = WAL;
   CREATE TABLE IF NOT EXISTS passwords(
       password_id INTEGER PRIMARY KEY,
       user_id INTEGER REFERENCES users(user_id),
@@ -41,7 +74,9 @@ const createTablesQuery = `
 export const initDB = async () => {
   try {
     const db = await getDBConnection();
-    await db.execAsync(createTablesQuery);
+    await db.execAsync(createUsersTableQuery);
+    await db.execAsync(createVaultTableQuery);
+    await db.execAsync(createPasswordsTableQuery);
 
     // const allRows = await db.getAllAsync("SELECT  website_name FROM passwords");
     // console.log("From DB All", allRows);

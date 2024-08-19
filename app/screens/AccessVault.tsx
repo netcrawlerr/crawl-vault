@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter, useGlobalSearchParams } from "expo-router";
+import { useRouter, useGlobalSearchParams, Link } from "expo-router";
 import { accessVault } from "@/database/database";
 import useUser from "../../hooks/useUser"; // Import Zustand store
 
@@ -115,7 +115,9 @@ const AccessVault = () => {
         <Text className="text-slate-100 text-center text-xl">Let Me Pass</Text>
       </TouchableOpacity>
 
-      <Text className="mt-2 text-blue-400 mb-2">Forgot code ?</Text>
+      <Link href={"/screens/SignupScreen"} className="mt-2 text-blue-400 mb-2">
+        Back to SignUp | Login
+      </Link>
     </View>
   );
 };

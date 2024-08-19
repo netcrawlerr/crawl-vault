@@ -69,12 +69,12 @@ const SignupScreen = () => {
 
   return (
     <View className="flex-1 justify-center p-6 h-screen bg-stone-900">
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => router.back()}
         className="absolute top-10 left-5"
       >
         <Ionicons name="arrow-back" size={24} color="white" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <Text className="text-3xl font-bold mb-3 text-slate-100">Enter your</Text>
       <Text className="text-3xl font-bold mb-3 text-slate-100">Email</Text>
