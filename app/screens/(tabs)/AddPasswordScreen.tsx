@@ -9,14 +9,57 @@ import {
   Animated,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import useStore from "@/hooks/usePassword";
+import { addPasswordToDB } from "@/database/database";
+import useUser from "@/hooks/useUser";
 
 const AddPasswordScreen = () => {
-  const [website, setWebsite] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [category, setCategory] = useState("");
+  // const [website, setWebsite] = useState("");
+  // const [username, setUsername] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [category, setCategory] = useState("");
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const slideAnim = useRef(new Animated.Value(0)).current;
+
+  const { userId } = useUser();
+
+  const {
+    website,
+    username,
+    password,
+    category,
+    setWebsite,
+    setUsername,
+    setPassword,
+    setCategory,
+    addPassword,
+  } = useStore();
+
+  const handlePress = async () => {
+    const newPassword = {
+      website,
+      username,
+      password,
+      category,
+    };
+    addPassword(newPassword); // Add new password to Zustand store
+
+    const addedPassword = await addPasswordToDB(
+      userId,
+      website,
+      username,
+      password,
+      category
+    );
+
+    console.log("Added password from Frontend", addedPassword);
+
+    // Optionally, reset the form fields here
+    setWebsite("");
+    setUsername("");
+    setPassword("");
+    setCategory("");
+  };
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -48,15 +91,15 @@ const AddPasswordScreen = () => {
     };
   }, [slideAnim]);
 
-  const handlePress = () => {
-    console.log("Website:", website);
-    console.log("Username:", username);
-    console.log("Password:", password);
-    console.log("Category:", category);
-  };
+  // const handlePress = () => {
+  //   console.log("Website:", website);
+  //   console.log("Username:", username);
+  //   console.log("Password:", password);
+  //   console.log("Category:", category);
+  // };
 
   return (
-    <View className="flex-1 justify-center p-6 bg-stone-900">
+    <View className="flex-1 justify-center h-screen p-6 bg-stone-900">
       {!isKeyboardVisible && (
         <Animated.View style={{ transform: [{ translateY: slideAnim }] }}>
           <Image
@@ -108,7 +151,6 @@ const AddPasswordScreen = () => {
           <Picker.Item label="Personal" value="personal" />
           <Picker.Item label="Work" value="work" />
           <Picker.Item label="Social" value="social" />
-          <Picker.Item label="Business" value="business" />
         </Picker>
       </View>
 
