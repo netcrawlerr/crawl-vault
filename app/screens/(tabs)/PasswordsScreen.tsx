@@ -18,7 +18,12 @@ import { useRouter } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 import useStore from "@/hooks/usePassword";
 import useUser from "@/hooks/useUser";
-import { getAllPasswords, initDB } from "@/database/database";
+import {
+  deletePassword,
+  getAllPasswords,
+  initDB,
+  updatePasswordDB,
+} from "@/database/database";
 
 const PasswordsScreen = () => {
   const [search, setSearch] = useState("");
@@ -89,10 +94,32 @@ const PasswordsScreen = () => {
   };
 
   // Save updated data to Zustand store
-  const handleSave = () => {
+  const handleSave = async () => {
+    await updatePasswordDB(
+      editingData.website,
+      editingData.username,
+      editingData.password,
+      editingData.category,
+      userId,
+      editingData.id
+    );
+
     updatePassword(editingData); // Update password in the store
+
+    // i have to fetch again to avoid delayed uodate of ui
+    const fetchedPasswords = await getAllPasswords(userId);
+    setPasswords(fetchedPasswords);
+
     closeModal();
   };
+
+  // const handleDelete = async () => {
+  //   console.log("from handle delete", passwords);
+
+  //   // await deletePassword(passwords.)
+  // };
+
+  // console.log("editedData", editingData);
 
   const router = useRouter();
 
@@ -177,11 +204,34 @@ const PasswordsScreen = () => {
               key={index}
               className="flex-row bg-stone-800 p-4 rounded-lg items-center"
             >
-              <Image
-                source={{ uri: "https://via.placeholder.com/80" }} // Replace with actual image source if available
-                className="w-12 h-12 rounded-full mr-4"
-              />
+              <TouchableOpacity
+                onPress={async () => {
+                  await deletePassword(password.password_id);
+                  const fetchedPasswords = await getAllPasswords(userId);
+                  setPasswords(fetchedPasswords);
+                }}
+                className="w-12 h-12"
+              >
+                <View
+                  style={{
+                    height: 40,
+                    width: 40,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Ionicons name="trash-bin" size={30} color="#725466" />
+                </View>
+
+                {/* <Image
+                  source={{ uri: "https://via.placeholder.com/80" }} // Replace with actual image source if available
+                  className="w-12 h-12 rounded-full mr-4"
+                /> */}
+              </TouchableOpacity>
               <View className="flex-1">
+                <Text className="text-green-500 text-l font-bold">
+                  {password.website_name} {/* Change according to your data */}
+                </Text>
                 <Text className="text-slate-100 text-l font-bold">
                   {password.website_user} {/* Change according to your data */}
                 </Text>

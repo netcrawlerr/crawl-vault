@@ -1,21 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  Alert,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import useUser from "@/hooks/useUser";
 import { useFocusEffect } from "@react-navigation/native";
-import { fetchSingleUser } from "@/database/database";
+import { fetchSingleUser, updateUser } from "@/database/database";
 
 const ProfileScreen = () => {
   const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("john.doe@example.com");
-  const [password, setPassword] = useState("21387ህ#2ጁህድ#");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isPasswordVisible, setPasswordVisible] = useState(false);
 
   const { userId } = useUser();
   console.log("User id in profile screen", userId);
 
-  const handleSavePress = () => {};
+  const handleSavePress = async () => {
+    if (password.length < 8) {
+      Alert.alert(
+        "You are doing it wrong",
+        "Password must be at least 8 characters long"
+      );
+      return;
+    }
 
+    if (!name.trim()) {
+      Alert.alert("You are doing it wrong", "Name cannot be empty");
+      return;
+    }
+
+    try {
+      await updateUser(name, password, userId);
+      Alert.alert("Success", "Profile saved successfully");
+    } catch (error) {
+      Alert.alert("Error", "Failed to save profile");
+    }
+  };
   const togglePasswordVisibility = () => {
     setPasswordVisible(!isPasswordVisible);
   };
@@ -38,7 +64,8 @@ const ProfileScreen = () => {
       {/* Profile Header */}
       <View className="flex flex-row items-center mb-6">
         <Image
-          source={{ uri: "https://via.placeholder.com/100" }}
+          // source={require("../../../assets/images/user.gif")}
+          source={require("../../../assets/images/user.png")}
           className="w-24 h-24 rounded-full border-2 border-slate-200"
         />
         <View className="ml-4">
@@ -73,6 +100,7 @@ const ProfileScreen = () => {
               className="text-slate-100 border border-white py-3 px-4 text-lg font-bold"
               placeholder="Email"
               keyboardType="email-address"
+              editable={false}
             />
           </View>
 

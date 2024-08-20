@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Keyboard,
   Animated,
+  Alert,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import useStore from "@/hooks/usePassword";
@@ -14,10 +15,6 @@ import { addPasswordToDB } from "@/database/database";
 import useUser from "@/hooks/useUser";
 
 const AddPasswordScreen = () => {
-  // const [website, setWebsite] = useState("");
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [category, setCategory] = useState("");
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const slideAnim = useRef(new Animated.Value(0)).current;
 
@@ -36,6 +33,12 @@ const AddPasswordScreen = () => {
   } = useStore();
 
   const handlePress = async () => {
+    // Validation
+    if (!website.trim() || !username.trim() || !password.trim()) {
+      Alert.alert("Error", "Please fill out all required fields.");
+      return;
+    }
+
     const newPassword = {
       website,
       username,
@@ -90,13 +93,6 @@ const AddPasswordScreen = () => {
       keyboardDidShowListener.remove();
     };
   }, [slideAnim]);
-
-  // const handlePress = () => {
-  //   console.log("Website:", website);
-  //   console.log("Username:", username);
-  //   console.log("Password:", password);
-  //   console.log("Category:", category);
-  // };
 
   return (
     <View className="flex-1 justify-center h-screen p-6 bg-stone-900">
