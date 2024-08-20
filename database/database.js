@@ -229,19 +229,15 @@ export const accessVault = async (userId) => {
       "SELECT * FROM vault WHERE user_id = ? ",
       [userId]
     );
-    console.log("Result from access vault db", result);
 
     if (!result) {
       console.log("No code for this user");
       return { error: "No code found" };
     }
 
-    // Ensure 'code' is in a proper format before returning
-    const codeArray = JSON.parse(result.code); // Convert JSON string to array
-    const codeString = codeArray.join(""); // Join array elements into a single string
-
+    // Return the code directly if it's already a string
     return {
-      code: codeString, // Return the concatenated code string
+      code: result.code, // Return the code string as-is
       user_id: result.user_id,
       vault_id: result.vault_id,
     };
@@ -354,5 +350,152 @@ export const fetchSingleUser = async (userId) => {
   } catch (error) {
     console.log("Error fetching user:", error);
     return { error: "Failed to fetch user" };
+  }
+};
+export const updatePasswordDB = async (
+  website_name,
+  website_user,
+  website_password,
+  category,
+  user_id,
+  password_id
+) => {
+  try {
+    const db = await getDBConnection();
+    if (!db) {
+      console.log("Database connection is null.");
+      return { error: "Database connection failed" };
+    }
+
+    const result = await db.runAsync(
+      `UPDATE passwords
+      SET 
+          website_name = ?,
+          website_user = ?,
+          website_password = ?,
+          category = ?
+      WHERE 
+          user_id = ? AND password_id = ?;`,
+      [
+        website_name,
+        website_user,
+        website_password,
+        category,
+        user_id,
+        password_id,
+      ]
+    );
+
+    if (result.changes === 0) {
+      console.log("No password updated.");
+      return { error: "No passwords updated" };
+    }
+    const updated = await db.getFirstAsync(
+      "SELECT * FROM passwords WHERE password_id = ?",
+      [password_id]
+    );
+    console.log("updated password:", updated);
+    return updated;
+  } catch (error) {
+    console.log("Error updating password:", error);
+    return { error: "Failed to update password" };
+  }
+};
+
+export const deletePassword = async (password_id) => {
+  try {
+    const db = await getDBConnection();
+    if (!db) {
+      console.log("Database connection is null.");
+      return { error: "Database connection failed" };
+    }
+
+    const result = await db.runAsync(
+      `DELETE 
+       FROM passwords
+       WHERE password_id = ?
+       `,
+      [password_id]
+    );
+
+    if (result.changes === 0) {
+      console.log("No password deleted.");
+      return { error: "No passwords deleted" };
+    }
+    const deleted = await db.getFirstAsync(
+      "SELECT * FROM passwords WHERE password_id = ?",
+      [password_id]
+    );
+    if (!deleted) {
+      console.log("deleted password successfully");
+    }
+  } catch (error) {
+    console.log("Error deleting password:", error);
+    return { error: "Failed to delete password" };
+  }
+};
+
+export const updateUser = async (name, password, userId) => {
+  try {
+    const db = await getDBConnection();
+    if (!db) {
+      console.log("Database connection is null.");
+      return { error: "Database connection failed" };
+    }
+
+    const result = await db.runAsync(
+      `UPDATE users
+      SET 
+          name = ?,
+          password = ?
+      WHERE 
+          user_id = ?`,
+      [name, password, userId]
+    );
+
+    if (result.changes === 0) {
+      console.log("No user updated.");
+      return { error: "No users updated" };
+    }
+    const updatedUser = await db.getFirstAsync(
+      "SELECT * FROM users WHERE user_id = ?",
+      [userId]
+    );
+    console.log("updated user:", updatedUser);
+    return updatedUser;
+  } catch (error) {
+    console.log("Error updating user:", error);
+    return { error: "Failed to update user" };
+  }
+};
+
+export const changePIN = async (newCode, userId) => {
+  try {
+    const db = await getDBConnection();
+    if (!db) {
+      console.log("Database connection is null.");
+      return { error: "Database connection failed" };
+    }
+
+    const result = await db.runAsync(
+      `UPDATE vault
+      SET code = ?
+      WHERE user_id = ?`,
+      [newCode, userId]
+    );
+
+    if (result.changes === 0) {
+      console.log("No PIN updated.");
+      return { error: "No PIN updated" };
+    }
+    const updatedPIN = await db.getFirstAsync(
+      "SELECT * FROM vault WHERE user_id = ?",
+      [userId]
+    );
+    console.log("Updated user PIN:", updatedPIN);
+    return updatedPIN;
+  } catch (error) {
+    console.log("Error updating PIN:", error);
+    return { error: "Failed to update PIN" };
   }
 };

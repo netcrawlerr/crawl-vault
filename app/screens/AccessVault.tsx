@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter, useGlobalSearchParams, Link } from "expo-router";
 import { accessVault } from "@/database/database";
@@ -57,22 +64,28 @@ const AccessVault = () => {
       const result = await accessVault(userId);
       console.log("Result from handleAccessVault:", result);
 
+      if (result.error) {
+        console.log("Vault Access Error:", result.error);
+        Alert.alert("Error", "Failed to access vault. Please try again.");
+        return;
+      }
+
       const isCorrectCode = userInputCode === result.code;
       console.log("Is Correct Code:", isCorrectCode);
 
       if (isCorrectCode) {
-        setIsLoggedIn(true); // Only set as logged in if the code is correct
-        setUserId(userId); // Persist the user ID in the store
-        router.replace("/screens/Main"); // Use replace instead of push to prevent back navigation to AccessVault
+        setIsLoggedIn(true);
+        setUserId(userId);
+        router.replace("/screens/Main");
       } else {
         console.log("Incorrect PIN");
-        // Optionally, you can show an error message here.
+        Alert.alert("Error", "Incorrect PIN");
       }
 
-      // Reset the code inputs
       setCode(["", "", "", ""]);
     } catch (error) {
       console.log("Error in handleAccessVault:", error);
+      Alert.alert("Error", "An unexpected error occurred. Please try again.");
     }
   };
 
