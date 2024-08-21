@@ -14,7 +14,7 @@ const OnboardingTwo = () => {
           Let's Get Started
         </Text>
         <Text className="text-lg text-center text-slate-100 px-5 mx-8">
-          Login or create account to store your password in yout secured vault
+          Login or create account to store your password in your secured vault
           and save for later use
         </Text>
       </View>

@@ -14,8 +14,8 @@ const OnboardingOne = () => {
           Welcome To Crawl Vault
         </Text>
         <Text className="text-lg text-center text-white px-5 mx-8">
-          Easily Store And Access Your Passwords With Our Intuitive App. Your
-          Security, Simplified
+          Effortlessly Manage and Retrieve Your Passwords with Our User-Friendly
+          App. Your Security Made Simple.
         </Text>
       </View>
 

@@ -44,9 +44,9 @@ const createUsersTableQuery = `
 PRAGMA journal_mode = WAL;
   CREATE TABLE IF NOT EXISTS users(
       user_id INTEGER PRIMARY KEY,
-      name VARCHAR(255) NOT NULL,
-      email VARCHAR(255) NOT NULL,
-      password VARCHAR(255) NOT NULL
+      name VARCHAR(40) NOT NULL,
+      email VARCHAR(80) NOT NULL,
+      password VARCHAR(100) NOT NULL
   );
 `;
 
@@ -64,10 +64,10 @@ PRAGMA journal_mode = WAL;
   CREATE TABLE IF NOT EXISTS passwords(
       password_id INTEGER PRIMARY KEY,
       user_id INTEGER REFERENCES users(user_id),
-      website_name VARCHAR(255) NOT NULL,
-      website_user VARCHAR(255) NOT NULL,
-      website_password VARCHAR(255) NOT NULL,
-      category VARCHAR(255) DEFAULT "personal"
+      website_name VARCHAR(40) NOT NULL,
+      website_user VARCHAR(40) NOT NULL,
+      website_password VARCHAR(100) NOT NULL,
+      category VARCHAR(40) DEFAULT "personal"
   );
 `;
 
@@ -78,8 +78,8 @@ export const initDB = async () => {
     await db.execAsync(createVaultTableQuery);
     await db.execAsync(createPasswordsTableQuery);
 
-    // const allRows = await db.getAllAsync("SELECT  website_name FROM passwords");
-    // console.log("From DB All", allRows);
+    const allRows = await db.getAllAsync("SELECT  * FROM users");
+    console.log("From DB All", allRows);
 
     console.log("Database initialized !");
   } catch (error) {
@@ -221,28 +221,25 @@ export const accessVault = async (userId) => {
   try {
     const db = await getDBConnection();
     if (!db) {
-      console.log("Database connection is null.");
+      console.error("Database connection is null.");
       return { error: "Database connection failed" };
     }
 
     const result = await db.getFirstAsync(
-      "SELECT * FROM vault WHERE user_id = ? ",
+      "SELECT * FROM vault WHERE user_id = ?",
       [userId]
     );
 
     if (!result) {
-      console.log("No code for this user");
+      console.error("No code for this user");
       return { error: "No code found" };
     }
 
-    // Return the code directly if it's already a string
-    return {
-      code: result.code, // Return the code string as-is
-      user_id: result.user_id,
-      vault_id: result.vault_id,
-    };
+    console.log("result.com from DB", result.code);
+    // Ensure result.code is returned as a string
+    return result.code;
   } catch (error) {
-    console.log("Error from accessVault", error);
+    console.error("Error from accessVault:", error);
     return { error: "Vault Access failed" };
   }
 };
@@ -469,33 +466,23 @@ export const updateUser = async (name, password, userId) => {
   }
 };
 
-export const changePIN = async (newCode, userId) => {
+export const changePIN = async (newPIN, userId) => {
   try {
     const db = await getDBConnection();
     if (!db) {
-      console.log("Database connection is null.");
+      console.error("Database connection is null.");
       return { error: "Database connection failed" };
     }
 
-    const result = await db.runAsync(
-      `UPDATE vault
-      SET code = ?
-      WHERE user_id = ?`,
-      [newCode, userId]
-    );
+    // Update the vault table with the new PIN
+    await db.runAsync("UPDATE vault SET code = ? WHERE user_id = ?", [
+      newPIN,
+      userId,
+    ]);
 
-    if (result.changes === 0) {
-      console.log("No PIN updated.");
-      return { error: "No PIN updated" };
-    }
-    const updatedPIN = await db.getFirstAsync(
-      "SELECT * FROM vault WHERE user_id = ?",
-      [userId]
-    );
-    console.log("Updated user PIN:", updatedPIN);
-    return updatedPIN;
+    return { success: true };
   } catch (error) {
-    console.log("Error updating PIN:", error);
-    return { error: "Failed to update PIN" };
+    console.error("Error from changePIN:", error);
+    return { error: "Failed to change PIN" };
   }
 };

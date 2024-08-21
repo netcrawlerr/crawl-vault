@@ -47,8 +47,10 @@ const CreateVaultPassword = () => {
   const handleSetVault = async () => {
     console.log("Code set is ", code.join(""));
     console.log("User ID is ", userId);
+    console.log("created Codev---------", code.join(""));
+
     try {
-      const createdVault = await createVault(userId, code);
+      const createdVault = await createVault(userId, code.join(""));
       console.log("Created Vault", createdVault);
 
       // Navigate to LoginScreen after setting the vault

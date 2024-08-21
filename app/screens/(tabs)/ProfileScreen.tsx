@@ -13,7 +13,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { fetchSingleUser, updateUser } from "@/database/database";
 
 const ProfileScreen = () => {
-  const [name, setName] = useState("John Doe");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setPasswordVisible] = useState(false);

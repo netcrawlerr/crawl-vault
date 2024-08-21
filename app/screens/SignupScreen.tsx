@@ -40,7 +40,11 @@ const SignupScreen = () => {
     }
 
     try {
-      const newUser = await registerUser(name, email, password);
+      const newUser = await registerUser(
+        name.trim(),
+        email.trim(),
+        password.trim()
+      );
       console.log("registration data ==", name, email, password);
       console.log("new user ==", newUser);
 

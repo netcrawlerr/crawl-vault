@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter, Link } from "expo-router";
-import { loginUser } from "@/database/database";
+import { initDB, loginUser } from "@/database/database";
 import useUser from "@/hooks/useUser"; // Import Zustand store
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -14,6 +14,7 @@ const LoginScreen = () => {
   const { setIsLoggedIn, setIsRegistered, setUserId, setUser, userId } =
     useUser(); // Get Zustand store methods
 
+  initDB();
   const validateInputs = () => {
     if (!email.trim()) {
       setMessage("Email cannot be empty");

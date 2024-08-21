@@ -283,6 +283,7 @@ const PasswordsScreen = () => {
               onChangeText={(text) =>
                 setEditingData({ ...editingData, website: text })
               }
+              autoCapitalize="none"
             />
             <TextInput
               className="border border-white text-slate-100 p-3 rounded mb-4"
@@ -292,6 +293,7 @@ const PasswordsScreen = () => {
               onChangeText={(text) =>
                 setEditingData({ ...editingData, username: text })
               }
+              autoCapitalize="none"
             />
             <TextInput
               className="border border-white text-slate-100 p-3 rounded mb-4"
@@ -301,6 +303,7 @@ const PasswordsScreen = () => {
               onChangeText={(text) =>
                 setEditingData({ ...editingData, password: text })
               }
+              autoCapitalize="none"
             />
             <View className="border border-white rounded mb-4">
               <Picker
@@ -326,13 +329,13 @@ const PasswordsScreen = () => {
             <View className="flex justify-center my-2 gap-y-3 ">
               <TouchableOpacity
                 onPress={handleSave}
-                className="bg-blue-500 p-2 rounded py-3"
+                className="bg-green-600 p-2 rounded py-3"
               >
                 <Text className="text-white text-center text-l">Save</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={closeModal}
-                className="bg-red-500 p-2 rounded py-3"
+                className="bg-stone-600 p-2 rounded py-3"
               >
                 <Text className="text-white text-center text-l">Cancel</Text>
               </TouchableOpacity>

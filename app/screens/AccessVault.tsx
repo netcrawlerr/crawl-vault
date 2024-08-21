@@ -62,6 +62,7 @@ const AccessVault = () => {
       console.log("User Input Code:", userInputCode);
 
       const result = await accessVault(userId);
+
       console.log("Result from handleAccessVault:", result);
 
       if (result.error) {
@@ -70,12 +71,10 @@ const AccessVault = () => {
         return;
       }
 
-      const isCorrectCode = userInputCode === result.code;
-      console.log("Is Correct Code:", isCorrectCode);
+      const storedCode = result;
 
-      if (isCorrectCode) {
+      if (userInputCode === storedCode) {
         setIsLoggedIn(true);
-        setUserId(userId);
         router.replace("/screens/Main");
       } else {
         console.log("Incorrect PIN");
@@ -84,7 +83,7 @@ const AccessVault = () => {
 
       setCode(["", "", "", ""]);
     } catch (error) {
-      console.log("Error in handleAccessVault:", error);
+      console.error("Error in handleAccessVault:", error);
       Alert.alert("Error", "An unexpected error occurred. Please try again.");
     }
   };

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -12,12 +12,13 @@ import useUser from "@/hooks/useUser";
 import { useRouter } from "expo-router";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { accessVault, changePIN, getUserPIN } from "@/database/database";
+import { accessVault, changePIN } from "@/database/database";
 
 const SettingsScreen = () => {
   const { userId, isLoggedIn, setIsLoggedIn, setUser, setUserId } = useUser();
   const router = useRouter();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isAboutModalVisible, setIsAboutModalVisible] = useState(false);
   const [currentPIN, setCurrentPIN] = useState(["", "", "", ""]);
   const [newPIN, setNewPIN] = useState(["", "", "", ""]);
   const [isChangingPIN, setIsChangingPIN] = useState(false);
@@ -51,35 +52,47 @@ const SettingsScreen = () => {
   };
 
   const handleChangePIN = async () => {
-    const pinFromDB = await accessVault(userId);
-    const inputPIN = currentPIN.join("");
-    const changedPIN = newPIN.join("");
-
-    if (!inputPIN.trim() || !changedPIN.trim()) {
-      Alert.alert("Error", "PIN Can't be empty ");
-      return;
-    }
-
-    if (inputPIN.trim().length < 4 || changedPIN.trim().length < 4) {
-      Alert.alert("Error", "PIN Must Be 4 digits ");
-      return;
-    }
-
     try {
-      const isCorrectPIN = pinFromDB.code === inputPIN;
-      if (!isCorrectPIN) {
-        // Correct the condition to check if PIN is correct
+      const pinFromDB = await accessVault(userId);
+      const inputPIN = currentPIN.join("");
+      const changedPIN = newPIN.join("");
+
+      console.log("Pinf from db", pinFromDB);
+      console.log("Changed pin", changedPIN);
+
+      if (!inputPIN.trim() || !changedPIN.trim()) {
+        Alert.alert("Error", "PIN can't be empty");
+        return;
+      }
+
+      if (inputPIN.length !== 4 || changedPIN.length !== 4) {
+        Alert.alert("Error", "PIN must be 4 digits");
+        return;
+      }
+
+      if (pinFromDB.error) {
+        Alert.alert("Error", pinFromDB.error);
+        return;
+      }
+
+      if (pinFromDB !== inputPIN) {
         Alert.alert("Error", "Incorrect PIN");
         return;
       }
 
-      await changePIN(changedPIN, userId);
+      const changeResult = await changePIN(changedPIN, userId);
+      if (changeResult.error) {
+        Alert.alert("Error", changeResult.error);
+        return;
+      }
+
       Alert.alert("Success", "PIN changed successfully");
       setIsModalVisible(false);
       setCurrentPIN(["", "", "", ""]);
       setNewPIN(["", "", "", ""]);
     } catch (error) {
-      console.log("error from handle change pin", error);
+      console.error("Error in handleChangePIN:", error);
+      Alert.alert("Error", "An unexpected error occurred. Please try again.");
     }
   };
 
@@ -99,6 +112,14 @@ const SettingsScreen = () => {
         refsArray.current[index - 1].focus();
       }
     }, 100); // Adding a small delay to ensure state update is processed
+  };
+
+  const handleOpenAboutModal = () => {
+    setIsAboutModalVisible(true);
+  };
+
+  const handleCloseAboutModal = () => {
+    setIsAboutModalVisible(false);
   };
 
   return (
@@ -124,21 +145,25 @@ const SettingsScreen = () => {
           <TouchableOpacity className="flex flex-row items-center bg-stone-800 p-4 rounded-lg">
             <Ionicons name="settings-outline" size={24} color="white" />
             <Text className="text-slate-100 text-l font-bold mx-2 flex-1">
-              Another Setting
-            </Text>
-            <Feather name="chevron-right" size={24} color="white" />
-          </TouchableOpacity>
-
-          <TouchableOpacity className="flex flex-row items-center bg-stone-800 p-4 rounded-lg">
-            <Ionicons name="color-palette-outline" size={24} color="white" />
-            <Text className="text-slate-100 text-l font-bold mx-2 flex-1">
-              Theme
+              Account Settings
             </Text>
             <Feather name="chevron-right" size={24} color="white" />
           </TouchableOpacity>
         </View>
       </View>
 
+      <View>
+        <Text className="text-2xl text-slate-100 font-bold mb-4">
+          Appearances
+        </Text>
+        <TouchableOpacity className="flex flex-row items-center mb-3 bg-stone-800 p-4 rounded-lg">
+          <Ionicons name="color-palette-outline" size={24} color="white" />
+          <Text className="text-slate-100 text-l font-bold mx-2 flex-1">
+            Theme
+          </Text>
+          <Feather name="chevron-right" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
       {/* Support Section */}
       <View>
         <Text className="text-2xl text-slate-100 font-bold mb-4">Support</Text>
@@ -160,7 +185,10 @@ const SettingsScreen = () => {
             <Feather name="chevron-right" size={24} color="white" />
           </TouchableOpacity>
 
-          <TouchableOpacity className="flex flex-row items-center bg-stone-800 p-4 rounded-lg">
+          <TouchableOpacity
+            onPress={handleOpenAboutModal}
+            className="flex flex-row items-center bg-stone-800 p-4 rounded-lg"
+          >
             <Ionicons
               name="information-circle-outline"
               size={24}
@@ -198,7 +226,7 @@ const SettingsScreen = () => {
         transparent={true}
         visible={isModalVisible}
         animationType="slide"
-        onRequestClose={() => setIsModalVisible(false)}
+        onRequestClose={handleCloseModal}
       >
         <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
           <View className="bg-stone-800 p-6 rounded-lg w-80">
@@ -261,6 +289,45 @@ const SettingsScreen = () => {
               className="bg-stone-600 p-3 rounded-lg"
             >
               <Text className="text-white text-center text-lg">Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* About Modal */}
+      <Modal
+        transparent={true}
+        visible={isAboutModalVisible}
+        animationType="slide"
+        onRequestClose={handleCloseAboutModal}
+      >
+        <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
+          <View className="bg-stone-800 p-6 rounded-lg w-80">
+            <Text className="text-2xl text-slate-100 mb-4">
+              About Crawl Vault
+            </Text>
+            <Text className="text-slate-100 mb-4">
+              Crawl Vault is a secure and user-friendly password management app
+              designed to simplify your digital life. With features such as
+              secure PIN-based access and easy password storage, Crawl Vault
+              ensures your credentials are protected while remaining easily
+              accessible.
+            </Text>
+            <Text className="text-slate-100 mb-4">
+              Developed by 𝕄𝔼𝕁𝕀𝔻 (netcrawler)
+            </Text>
+            <Text className="text-slate-100 mb-4">
+              {/* <Text className="font-bold">Contact:</Text> */}
+              {/* {"\n"}- Telegram: @netcrawler_ish */}
+              {/* {"\n"}- GitHub: netcrawlerr
+              {"\n"}- Website: [Your Website URL]
+              {"\n"}- LinkedIn: [Your LinkedIn URL] */}
+            </Text>
+            <TouchableOpacity
+              onPress={handleCloseAboutModal}
+              className="bg-stone-600 p-3 rounded-lg"
+            >
+              <Text className="text-white text-center text-lg">Close</Text>
             </TouchableOpacity>
           </View>
         </View>
