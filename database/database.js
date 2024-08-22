@@ -126,7 +126,7 @@ export const registerUser = async (name, email, password) => {
 
     if (result.changes === 0) {
       console.log("Failed to insert user.");
-      return { error: "Failed to register user" };
+      return { error: "Failed to register user, Try Reloading App" };
     }
 
     const newUserId = result.lastInsertRowId;
@@ -145,7 +145,7 @@ export const registerUser = async (name, email, password) => {
     return newUser;
   } catch (error) {
     console.log("Error from registerUser", error);
-    return { error: "Registration failed" };
+    return { error: "Registration failed, Try Reloading App" };
   }
 };
 
@@ -183,7 +183,7 @@ export const loginUser = async (email, password) => {
     }
   } catch (error) {
     console.log("Error during login:", error);
-    return { error: "Login failed" };
+    return { error: "Login failed, Try Reloading App" };
   }
 };
 
@@ -202,14 +202,14 @@ export const createVault = async (userId, code) => {
 
     if (result.changes === 0) {
       console.log("Failed to create vault.");
-      return { error: "Failed to create vault" };
+      return { error: "Failed to create vault, Try Reloading App" };
     }
 
     console.log("Vault created successfully for user:", userId);
     return { success: true };
   } catch (error) {
     console.log("Error from createVault", error);
-    return { error: "Vault creation failed" };
+    return { error: "Vault creation failed, Try Reloading App" };
   }
 };
 
@@ -236,7 +236,7 @@ export const accessVault = async (userId) => {
     return result.code;
   } catch (error) {
     console.error("Error from accessVault:", error);
-    return { error: "Vault Access failed" };
+    return { error: "Vault Access failed, Try Reloading App" };
   }
 };
 
@@ -281,7 +281,7 @@ export const addPasswordToDB = async (
     return newPassword;
   } catch (error) {
     console.log("Error from addPasswordToDB", error);
-    return { error: "Adding password failed" };
+    return { error: "Adding password failed, Try Reloading App" };
   }
 };
 
@@ -306,7 +306,7 @@ export const getAllPasswords = async (userId) => {
     return passwords;
   } catch (error) {
     console.log("Error fetching passwords:", error);
-    return { error: "Failed to fetch passwords" };
+    return { error: "Failed to fetch passwords, , Try Reloading App" };
   }
 };
 
@@ -332,7 +332,7 @@ export const fetchSingleUser = async (userId) => {
     return singleUser;
   } catch (error) {
     console.log("Error fetching user:", error);
-    return { error: "Failed to fetch user" };
+    return { error: "Failed to fetch user, Try Reloading App" };
   }
 };
 export const updatePasswordDB = async (
@@ -381,7 +381,7 @@ export const updatePasswordDB = async (
     return updated;
   } catch (error) {
     console.log("Error updating password:", error);
-    return { error: "Failed to update password" };
+    return { error: "Failed to update password, Try Reloading App" };
   }
 };
 
@@ -414,7 +414,7 @@ export const deletePassword = async (password_id) => {
     }
   } catch (error) {
     console.log("Error deleting password:", error);
-    return { error: "Failed to delete password" };
+    return { error: "Failed to delete password, Try Reloading App" };
   }
 };
 
@@ -448,7 +448,7 @@ export const updateUser = async (name, password, userId) => {
     return updatedUser;
   } catch (error) {
     console.log("Error updating user:", error);
-    return { error: "Failed to update user" };
+    return { error: "Failed to update user, Try Reloading App" };
   }
 };
 
@@ -468,7 +468,7 @@ export const changePIN = async (newPIN, userId) => {
     return { success: true };
   } catch (error) {
     console.error("Error from changePIN:", error);
-    return { error: "Failed to change PIN" };
+    return { error: "Failed to change PIN, Try Reloading App" };
   }
 };
 
@@ -501,6 +501,6 @@ export const changePassword = async (newPassword, userId) => {
     return updated;
   } catch (error) {
     console.log("Error updating password:", error);
-    return { error: "Failed to update password" };
+    return { error: "Failed to update password, Try Reloading App" };
   }
 };

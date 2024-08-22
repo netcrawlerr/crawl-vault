@@ -20,10 +20,13 @@ const Home = () => {
     setUserId,
   } = useUser();
 
-  async () => await initDB();
-  
   console.log("Is User Logged In___APP START", isLoggedIn);
   console.log("Is User Registeres In___APP START", isRegistered);
+
+  useEffect(() => {
+    const init = async () => await initDB();
+    init();
+  }, []);
 
   useEffect(() => {
     const loadInitialData = async () => {

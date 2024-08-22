@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -95,6 +96,15 @@ const PasswordsScreen = () => {
 
   // Save   Zustand store
   const handleSave = async () => {
+    if (
+      editingData.website.length == 0 ||
+      editingData.username.length == 0 ||
+      editingData.password.length == 0 ||
+      editingData.category.length == 0
+    ) {
+      Alert.alert("Error", "Fields Cannot be empty");
+      return;
+    }
     await updatePasswordDB(
       editingData.website,
       editingData.username,
@@ -103,6 +113,8 @@ const PasswordsScreen = () => {
       userId,
       editingData.id
     );
+
+    // console.log(typeof editingData.username);
 
     updatePassword(editingData);
 
