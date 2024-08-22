@@ -61,7 +61,6 @@ const ProfileScreen = () => {
 
   return (
     <View className="flex-1 p-5 bg-stone-900 justify-center items-center">
-      {/* Profile Header */}
       <View className="flex flex-row items-center mb-6">
         <Image
           // source={require("../../../assets/images/user.gif")}
@@ -76,13 +75,11 @@ const ProfileScreen = () => {
         </View>
       </View>
 
-      {/* Profile Details Section */}
       <View className="bg-stone-800 p-6 rounded-lg w-full max-w-md">
         <Text className="text-2xl text-slate-100 font-bold mb-4">
           Profile Details
         </Text>
         <View className="space-y-3">
-          {/* Name Field */}
           <View className="bg-stone-800 rounded-lg">
             <TextInput
               value={name}
@@ -92,7 +89,6 @@ const ProfileScreen = () => {
             />
           </View>
 
-          {/* Email Field */}
           <View className="bg-stone-800 rounded-lg">
             <TextInput
               value={email}
@@ -104,16 +100,15 @@ const ProfileScreen = () => {
             />
           </View>
 
-          {/* Password Field */}
           <View className="bg-stone-800 rounded-lg relative">
-            <TextInput
+            {/* <TextInput
               value={password}
               onChangeText={setPassword}
               className="text-slate-100 border border-white py-3 pl-4 pr-12 text-lg font-bold"
               placeholder="Change Password"
               placeholderTextColor={"gray"}
               secureTextEntry={!isPasswordVisible}
-            />
+            /> */}
             <TouchableOpacity
               onPress={togglePasswordVisibility}
               className="absolute right-4 top-[15px] transform  -translate-y-1/2"
@@ -126,7 +121,6 @@ const ProfileScreen = () => {
             </TouchableOpacity>
           </View>
 
-          {/* Save Profile Button */}
           <TouchableOpacity
             onPress={handleSavePress}
             className="bg-green-600 rounded-lg py-3 border"

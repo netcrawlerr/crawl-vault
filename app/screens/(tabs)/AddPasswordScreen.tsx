@@ -45,7 +45,7 @@ const AddPasswordScreen = () => {
       password,
       category,
     };
-    addPassword(newPassword); // Add new password to Zustand store
+    addPassword(newPassword); // to  Zustand store
 
     const addedPassword = await addPasswordToDB(
       userId,
@@ -57,7 +57,6 @@ const AddPasswordScreen = () => {
 
     console.log("Added password from Frontend", addedPassword);
 
-    // Optionally, reset the form fields here
     setWebsite("");
     setUsername("");
     setPassword("");
@@ -140,8 +139,8 @@ const AddPasswordScreen = () => {
           selectedValue={category}
           onValueChange={(itemValue) => setCategory(itemValue)}
           style={{
-            color: "white", // text color
-            backgroundColor: "transparent", // background color
+            color: "white",
+            backgroundColor: "transparent",
           }}
         >
           <Picker.Item label="Personal" value="personal" />

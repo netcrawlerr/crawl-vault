@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter, useGlobalSearchParams, Link } from "expo-router";
 import { createVault } from "@/database/database";
-import useUser from "../../hooks/useUser"; // Import Zustand store
+import useUser from "../../hooks/useUser";
 
 const CreateVaultPassword = () => {
   const { isLoggedIn } = useUser();
@@ -11,7 +11,6 @@ const CreateVaultPassword = () => {
   const [code, setCode] = useState(["", "", "", ""]);
   const router = useRouter();
 
-  // Extract userId from URL parameters
   const { userId: userIdFromParams } = useGlobalSearchParams();
 
   const { userId, setUserId } = useUser((state) => ({
@@ -19,7 +18,6 @@ const CreateVaultPassword = () => {
     setUserId: state.setUserId,
   }));
 
-  // Update Zustand store with userId from URL params
   useEffect(() => {
     if (userIdFromParams) {
       setUserId(userIdFromParams);
@@ -53,7 +51,6 @@ const CreateVaultPassword = () => {
       const createdVault = await createVault(userId, code.join(""));
       console.log("Created Vault", createdVault);
 
-      // Navigate to LoginScreen after setting the vault
       router.replace("/screens/LoginScreen");
     } catch (error) {
       console.log("error from create vault", error);

@@ -47,7 +47,7 @@ const Main = () => {
           paddingBottom: 10,
         },
         headerShown: true,
-        // Enable header
+
         headerRight: () => (
           <View style={{ marginRight: 16 }}>
             <TouchableOpacity onPress={handleLockApp}>

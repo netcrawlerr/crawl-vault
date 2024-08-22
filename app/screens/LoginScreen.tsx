@@ -3,16 +3,16 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter, Link } from "expo-router";
 import { initDB, loginUser } from "@/database/database";
-import useUser from "@/hooks/useUser"; // Import Zustand store
+import useUser from "@/hooks/useUser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState(""); // State for messages
+  const [message, setMessage] = useState("");
   const router = useRouter();
   const { setIsLoggedIn, setIsRegistered, setUserId, setUser, userId } =
-    useUser(); // Get Zustand store methods
+    useUser();
 
   initDB();
   const validateInputs = () => {
@@ -24,13 +24,13 @@ const LoginScreen = () => {
       setMessage("Password cannot be empty");
       return false;
     }
-    setMessage(""); // Clear message if inputs are valid
+    setMessage("");
     return true;
   };
 
   const handleLogin = async () => {
     if (!validateInputs()) {
-      return; // Stop execution if validation fails
+      return;
     }
 
     try {
@@ -39,24 +39,23 @@ const LoginScreen = () => {
       console.log("login user ==", user);
 
       if (user.error) {
-        setMessage(user.error); // Set error message if login fails
+        setMessage(user.error);
       } else {
         setMessage("Login successful");
-        // Set user details and update registration status
+
         setUserId(user.user_id);
         setUser(user);
         console.log("User id after login", userId);
 
-        // Save the login status in AsyncStorage
         await AsyncStorage.setItem("isLoggedIn", "true");
         await AsyncStorage.setItem("userId", String(user.user_id));
 
         setIsLoggedIn(true);
-        setIsRegistered(true); // Update registration status on successful login
+        setIsRegistered(true);
         router.replace(`/screens/AccessVault?userId=${user.user_id}`);
       }
     } catch (error) {
-      setMessage("Login failed"); // Set error message in case of failure
+      setMessage("Login failed");
       console.log("Error during login:", error);
     }
   };
@@ -106,7 +105,11 @@ const LoginScreen = () => {
 
       <TouchableOpacity
         onPress={handleLogin}
-        className="bg-green-600 px-36 py-3 rounded-lg mb-2"
+        className="bg-green-600 py-3 rounded-lg mb-2"
+        style={{
+          width: "100%",
+          alignSelf: "center",
+        }}
       >
         <Text className="text-slate-100 text-center text-xl">Login</Text>
       </TouchableOpacity>

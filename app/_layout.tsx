@@ -6,7 +6,7 @@ export default function Layout() {
   return (
     <Stack
       screenOptions={{
-        headerShown: false, // Hide headers globally
+        headerShown: false,
       }}
     >
       <Stack.Screen name="index" />
@@ -15,7 +15,6 @@ export default function Layout() {
       <Stack.Screen name="screens/LoginScreen" />
       <Stack.Screen name="screens/SignupScreen" />
       <Stack.Screen name="screens/Main" />
-      {/* Add other screens here */}
     </Stack>
   );
 }

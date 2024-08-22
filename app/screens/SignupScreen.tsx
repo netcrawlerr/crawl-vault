@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter, Link } from "expo-router";
-import { registerUser } from "@/database/database"; // Adjust the import path as needed
-import useUser from "@/hooks/useUser"; // Import Zustand store
+import { registerUser } from "@/database/database";
+import useUser from "@/hooks/useUser";
 
 const SignupScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState(""); // State for messages
+  const [message, setMessage] = useState("");
   const router = useRouter();
-  const { setIsRegistered, setUser } = useUser(); // Get Zustand store methods
+  const { setIsRegistered, setUser } = useUser();
 
   const validateInputs = () => {
     if (!name.trim()) {
@@ -30,13 +30,13 @@ const SignupScreen = () => {
       setMessage("Password must be at least 8 characters long");
       return false;
     }
-    setMessage(""); // Clear message if inputs are valid
+    setMessage("");
     return true;
   };
 
   const handleRegister = async () => {
     if (!validateInputs()) {
-      return; // Stop execution if validation fails
+      return;
     }
 
     try {
@@ -49,24 +49,24 @@ const SignupScreen = () => {
       console.log("new user ==", newUser);
 
       if (newUser.error) {
-        setMessage(newUser.error); // Set error message if registration fails
+        setMessage(newUser.error);
       } else {
         setMessage("Registration Successful");
         setIsRegistered(true);
-        // Set user details and registration status in Zustand store
+
         setUser({
           userId: newUser.user_id,
           name,
           email,
         });
         setIsRegistered(true);
-        // Navigate to CreateVaultPassword screen with userId as a query parameter
+
         router.replace(
           `/screens/CreateVaultPassword?userId=${newUser.user_id}`
         );
       }
     } catch (error) {
-      setMessage("Registration failed"); // Set error message in case of failure
+      setMessage("Registration failed");
       console.log("Error during registration:", error);
     }
   };
@@ -123,7 +123,11 @@ const SignupScreen = () => {
 
       <TouchableOpacity
         onPress={handleRegister}
-        className="bg-green-600 px-36 py-3 rounded-lg mb-2"
+        className="bg-green-600 py-3 rounded-lg mb-2"
+        style={{
+          width: "100%",
+          alignSelf: "center",
+        }}
       >
         <Text className="text-slate-100 text-center text-xl">Sign up</Text>
       </TouchableOpacity>

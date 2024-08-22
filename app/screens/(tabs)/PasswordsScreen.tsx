@@ -80,7 +80,7 @@ const PasswordsScreen = () => {
 
   const openEditModal = (data) => {
     setEditingData({
-      id: data.password_id, // Ensure the correct fields
+      id: data.password_id,
       website: data.website_name,
       username: data.website_user,
       password: data.website_password,
@@ -93,7 +93,7 @@ const PasswordsScreen = () => {
     setModalVisible(false);
   };
 
-  // Save updated data to Zustand store
+  // Save   Zustand store
   const handleSave = async () => {
     await updatePasswordDB(
       editingData.website,
@@ -104,7 +104,7 @@ const PasswordsScreen = () => {
       editingData.id
     );
 
-    updatePassword(editingData); // Update password in the store
+    updatePassword(editingData);
 
     // i have to fetch again to avoid delayed uodate of ui
     const fetchedPasswords = await getAllPasswords(userId);
@@ -230,10 +230,10 @@ const PasswordsScreen = () => {
               </TouchableOpacity>
               <View className="flex-1">
                 <Text className="text-green-500 text-l font-bold">
-                  {password.website_name} {/* Change according to your data */}
+                  {password.website_name}
                 </Text>
                 <Text className="text-slate-100 text-l font-bold">
-                  {password.website_user} {/* Change according to your data */}
+                  {password.website_user}
                 </Text>
                 <Text
                   className="text-slate-300 text-sm mt-1"
@@ -241,7 +241,6 @@ const PasswordsScreen = () => {
                   ellipsizeMode="tail"
                 >
                   {password.website_password}{" "}
-                  {/* Change according to your data */}
                 </Text>
               </View>
               <TouchableOpacity
@@ -261,7 +260,7 @@ const PasswordsScreen = () => {
         </View>
       </ScrollView>
 
-      {/* Modal for editing password */}
+      {/* lets edit  */}
       <Modal
         visible={isModalVisible}
         onRequestClose={closeModal}

@@ -10,7 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter, useGlobalSearchParams, Link } from "expo-router";
 import { accessVault } from "@/database/database";
-import useUser from "../../hooks/useUser"; // Import Zustand store
+import useUser from "../../hooks/useUser";  
 
 const AccessVault = () => {
   const { isLoggedIn, setIsLoggedIn, isRegistered, setIsRegistered } =
@@ -21,7 +21,7 @@ const AccessVault = () => {
 
   const [code, setCode] = useState(["", "", "", ""]);
   const router = useRouter();
-  // Extract userId from URL parameters
+  
   const { userId: userIdFromParams } = useGlobalSearchParams();
 
   const { userId, setUserId } = useUser((state) => ({
@@ -31,7 +31,6 @@ const AccessVault = () => {
 
   console.log("Accessing Vault userid", userId);
 
-  // Update Zustand store with userId from URL params
   useEffect(() => {
     if (userIdFromParams) {
       setUserId(userIdFromParams);
