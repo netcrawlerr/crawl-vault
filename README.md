@@ -21,6 +21,9 @@ With features like strong encryption, secure authentication, and a PIN-based loc
 
 ## **Demo**
 
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+
 <img src="https://drive.google.com/uc?export=view&id=14laeCtbD-597JFpVL9CwQFZZDwmxmc8z" alt="Crawl Vault Demo" width="200"/>
 
 
@@ -47,3 +50,4 @@ With features like strong encryption, secure authentication, and a PIN-based loc
 
 <img src="https://drive.google.com/uc?export=view&id=18I7AIjGyYUifR66G8HMwFSIWFEV2qYQv" alt="App Overview" width="200"/>
 
+</div>
