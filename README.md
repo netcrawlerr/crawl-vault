@@ -16,9 +16,8 @@
 - **Expo**
 - **Tailwind CSS**
 - **NativeWind**
-
 ## **Demo**
 
 ![Crawl Vault Demo](https://drive.google.com/uc?export=view&id=14laeCtbD-597JFpVL9CwQFZZDwmxmc8z)
+{ width=50% }
 
- 
