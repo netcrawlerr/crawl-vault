@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { useRouter, Link } from "expo-router";
 import { initDB, loginUser } from "@/database/database";
 import useUser from "@/hooks/useUser";
@@ -62,13 +61,6 @@ const LoginScreen = () => {
 
   return (
     <View className="flex-1 justify-center p-6 bg-stone-900 h-screen ">
-      {/* <TouchableOpacity
-        onPress={() => router.back()}
-        className="absolute top-10 left-5"
-      >
-        <Ionicons name="arrow-back" size={24} color="white" />
-      </TouchableOpacity> */}
-
       <Text className="text-3xl text-center font-bold mb-4 text-slate-100">
         Login
       </Text>

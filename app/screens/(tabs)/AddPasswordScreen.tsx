@@ -45,7 +45,7 @@ const AddPasswordScreen = () => {
       password,
       category,
     };
-    addPassword(newPassword); // to  Zustand store
+    addPassword(newPassword);
 
     const addedPassword = await addPasswordToDB(
       userId,

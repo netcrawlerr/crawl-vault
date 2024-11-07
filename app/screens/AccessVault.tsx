@@ -7,10 +7,9 @@ import {
   Image,
   Alert,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { useRouter, useGlobalSearchParams, Link } from "expo-router";
 import { accessVault } from "@/database/database";
-import useUser from "../../hooks/useUser";  
+import useUser from "../../hooks/useUser";
 
 const AccessVault = () => {
   const { isLoggedIn, setIsLoggedIn, isRegistered, setIsRegistered } =
@@ -21,7 +20,7 @@ const AccessVault = () => {
 
   const [code, setCode] = useState(["", "", "", ""]);
   const router = useRouter();
-  
+
   const { userId: userIdFromParams } = useGlobalSearchParams();
 
   const { userId, setUserId } = useUser((state) => ({

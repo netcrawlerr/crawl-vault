@@ -204,6 +204,7 @@ export const createVault = async (userId, code) => {
       console.log("Failed to create vault.");
       return { error: "Failed to create vault, Try Reloading App" };
     }
+    
 
     console.log("Vault created successfully for user:", userId);
     return { success: true };

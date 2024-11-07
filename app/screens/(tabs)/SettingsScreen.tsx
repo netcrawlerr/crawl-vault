@@ -26,8 +26,6 @@ const SettingsScreen = () => {
   const [enteredPIN, setEnteredPIN] = useState(["", "", "", ""]);
   const [newPIN, setNewPIN] = useState(["", "", "", ""]);
   const [newPassword, setNewPassword] = useState("");
-  const [isChangingPIN, setIsChangingPIN] = useState(false);
-
   const currentPinRefs = useRef([]);
   const enteredPinRefs = useRef([]);
   const newPinRefs = useRef([]);
@@ -268,7 +266,7 @@ const SettingsScreen = () => {
         </View>
       </View>
 
-      {/* PIN change modal */}
+      {/* PIN change mOdal */}
       <Modal
         visible={isModalVisible}
         animationType="slide"
@@ -358,7 +356,6 @@ const SettingsScreen = () => {
               Change Password
             </Text>
 
-            {/* PIN Input Field */}
             <View className="flex-row justify-between mb-4">
               {enteredPIN.map((digit, index) => (
                 <TextInput
@@ -382,7 +379,6 @@ const SettingsScreen = () => {
               ))}
             </View>
 
-            {/* New Password Input Field */}
             <TextInput
               value={newPassword}
               onChangeText={setNewPassword}
@@ -410,7 +406,6 @@ const SettingsScreen = () => {
         </View>
       </Modal>
 
-      {/* About Modal */}
       <Modal
         visible={isAboutModalVisible}
         animationType="slide"

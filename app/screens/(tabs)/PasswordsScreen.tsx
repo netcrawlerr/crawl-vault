@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -22,7 +22,6 @@ import useUser from "@/hooks/useUser";
 import {
   deletePassword,
   getAllPasswords,
-  initDB,
   updatePasswordDB,
 } from "@/database/database";
 
@@ -38,7 +37,6 @@ const PasswordsScreen = () => {
     category: "",
   });
 
-  // initDB();
   const { userId } = useUser();
 
   const { setPasswords, passwords, updatePassword } = useStore((state) => ({
@@ -51,14 +49,11 @@ const PasswordsScreen = () => {
     React.useCallback(() => {
       const fetchPasswords = async () => {
         const fetchedPasswords = await getAllPasswords(userId);
-        // console.log("Effect", fetchedPasswords);
         setPasswords(fetchedPasswords);
       };
       fetchPasswords();
     }, [userId, selectedCategory])
   );
-
-  // console.log("passwords", passwords);
 
   const displayedPasswords = Array.isArray(passwords) ? passwords : [];
 
@@ -72,7 +67,6 @@ const PasswordsScreen = () => {
           .toLowerCase()
           .includes(search.toLowerCase()))
   );
-  // console.log(filteredPasswords);
 
   const copyToClipboard = (password) => {
     Clipboard.setString(password);
@@ -94,7 +88,7 @@ const PasswordsScreen = () => {
     setModalVisible(false);
   };
 
-  // Save   Zustand store
+  // Save   tomy store
   const handleSave = async () => {
     if (
       editingData.website.length == 0 ||
@@ -113,11 +107,7 @@ const PasswordsScreen = () => {
       userId,
       editingData.id
     );
-
-    // console.log(typeof editingData.username);
-
     updatePassword(editingData);
-
     // i have to fetch again to avoid delayed uodate of ui
     const fetchedPasswords = await getAllPasswords(userId);
     setPasswords(fetchedPasswords);
@@ -125,25 +115,8 @@ const PasswordsScreen = () => {
     closeModal();
   };
 
-  // const handleDelete = async () => {
-  //   console.log("from handle delete", passwords);
-
-  //   // await deletePassword(passwords.)
-  // };
-
-  // console.log("editedData", editingData);
-
-  const router = useRouter();
-
   return (
     <View className="flex-1 p-6 h-screen bg-stone-900">
-      {/* <TouchableOpacity
-        onPress={() => router.back()}
-        className="absolute top-10 left-5"
-      >
-        <Ionicons name="arrow-back" size={24} color="white" />
-      </TouchableOpacity> */}
-
       <View className="relative w-full mb-4 mt-16">
         <Ionicons
           name="search"
@@ -234,11 +207,6 @@ const PasswordsScreen = () => {
                 >
                   <Ionicons name="trash-bin" size={30} color="#725466" />
                 </View>
-
-                {/* <Image
-                  source={{ uri: "https://via.placeholder.com/80" }} // Replace with actual image source if available
-                  className="w-12 h-12 rounded-full mr-4"
-                /> */}
               </TouchableOpacity>
               <View className="flex-1">
                 <Text className="text-green-500 text-l font-bold">

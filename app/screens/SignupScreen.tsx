@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { useRouter, Link } from "expo-router";
 import { registerUser } from "@/database/database";
 import useUser from "@/hooks/useUser";
@@ -73,13 +72,6 @@ const SignupScreen = () => {
 
   return (
     <View className="flex-1 justify-center p-6 h-screen bg-stone-900">
-      {/* <TouchableOpacity
-        onPress={() => router.back()}
-        className="absolute top-10 left-5"
-      >
-        <Ionicons name="arrow-back" size={24} color="white" />
-      </TouchableOpacity> */}
-
       <Text className="text-3xl font-bold mb-3 text-slate-100">Enter your</Text>
       <Text className="text-3xl font-bold mb-3 text-slate-100">Email</Text>
 

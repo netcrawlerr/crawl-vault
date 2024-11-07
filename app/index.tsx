@@ -54,19 +54,6 @@ const Home = () => {
   console.log("User is when loading is ", userId);
 
   return (
-    // <View className="flex-1 bg-stone-900 h-screen">
-    //   {showSplash ? (
-    //     <SplashScreen />
-    //   ) : isRegistered ? (
-    //     isLoggedIn ? (
-    //       <Main />
-    //     ) : (
-    //       <AccessVault />
-    //     )
-    //   ) : (
-    //     <OnboardingOne />
-    //   )}
-    // </View>
     <View className="flex-1 bg-stone-900 h-screen">
       {showSplash ? (
         <SplashScreen />

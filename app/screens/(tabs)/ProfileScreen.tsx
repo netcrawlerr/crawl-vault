@@ -50,7 +50,6 @@ const ProfileScreen = () => {
     React.useCallback(() => {
       const fetchUser = async () => {
         const user = await fetchSingleUser(userId);
-        // console.log("FetchedSingle User", user);
         setName(user.name);
         setEmail(user.email);
         setPassword(user.password);
@@ -63,7 +62,6 @@ const ProfileScreen = () => {
     <View className="flex-1 p-5 bg-stone-900 justify-center items-center">
       <View className="flex flex-row items-center mb-6">
         <Image
-          // source={require("../../../assets/images/user.gif")}
           source={require("../../../assets/images/user.png")}
           className="w-24 h-24 rounded-full border-2 border-slate-200"
         />
@@ -101,14 +99,6 @@ const ProfileScreen = () => {
           </View>
 
           <View className="bg-stone-800 rounded-lg relative">
-            {/* <TextInput
-              value={password}
-              onChangeText={setPassword}
-              className="text-slate-100 border border-white py-3 pl-4 pr-12 text-lg font-bold"
-              placeholder="Change Password"
-              placeholderTextColor={"gray"}
-              secureTextEntry={!isPasswordVisible}
-            /> */}
             <TouchableOpacity
               onPress={togglePasswordVisibility}
               className="absolute right-4 top-[15px] transform  -translate-y-1/2"
