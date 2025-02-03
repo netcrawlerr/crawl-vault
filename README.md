@@ -52,3 +52,5 @@ With features like strong encryption, secure authentication, and a PIN-based loc
 - **Tailwind CSS**: Utility-first CSS framework for creating beautiful, responsive designs.
 - **NativeWind**: Tailwind CSS integration for React Native apps, providing seamless styling.
 
+- # [] Sync
+
